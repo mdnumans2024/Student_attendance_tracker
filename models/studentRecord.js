@@ -16,6 +16,7 @@ const studentRecordSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     email: {
         type: String,
@@ -26,9 +27,7 @@ const studentRecordSchema = mongoose.Schema({
         type: [attendanceSchema],
         default: [],
     }
-
 });
-
 
 const StudentRecord = mongoose.model('StudentRecord', studentRecordSchema);
 
