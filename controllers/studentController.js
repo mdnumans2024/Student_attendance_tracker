@@ -70,13 +70,33 @@ exports.deleteStudent = async (req, res) => {
 }
 
 exports.updateStudent = async (req, res) =>{
-    const attendanceDate = req.body;
+    const {attendanceDate} = req.body;
     const length = req.body.attendance ? req.body.attendance.length : 0; 
 
     try {
-        
-    } catch (error) {
-        
-    }
+     //Update student attendances records for students who are marked as present
+     for(let i = 0; i < length; i++){
+        const studentId = req.body.attendance[i];
+        await StudentRecord.findByIdAndUpdate(
+            studentId,
+            {
+                $inc: {attendanceCount: 1},
+                $push: {attendance: {date: new Date(attendanceDate), status: 'present'}}
+            },  
+            { new: true },        
+        )
+     }
 
+     //Mark students who are not present as absent
+     await StudentRecord.updateMany(
+        {_id: { $nin: req.body.attendance}},
+        {
+            $push: {attendance: {date: new Date(attendanceDate), status: 'absent'}}
+        }
+     )
+        res.redirect('/attendance');
+
+    } catch (error) {
+        return res.status(500).send(`Internal Server Error: ${error}`);
+    }
 }

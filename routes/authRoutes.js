@@ -19,6 +19,7 @@ router.post('/delete', studentController.deleteAllRecords);
 router.get('/api/v1/records', studentController.getAllRecords);
 router.post('/api/v1/addstudent', studentController.addStudent);
 router.post('/addstudent', studentController.addStudent);
+router.post('/updatestudent', studentController.updateStudent)
 
 
 module.exports = router;
